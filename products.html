@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - VSR Farm's</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* --- Global & Reset --- */
+        body {
+            background-color: #f0f2f5;
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* --- Search Section --- */
+        .search-section {
+            background: white;
+            padding: 20px 5%;
+            margin: 0 0 40px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            display: flex;
+            justify-content: center;
+            position: sticky;
+            top: 70px;
+            /* Adjust based on nav height */
+            z-index: 900;
+        }
+
+        .search-box {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 15px 50px;
+            border: 2px solid #eee;
+            border-radius: 50px;
+            background: #f9f9f9;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .search-box input:focus {
+            background: white;
+            border-color: #27ae60;
+            box-shadow: 0 5px 20px rgba(39, 174, 96, 0.15);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #27ae60;
+            font-size: 1.1rem;
+        }
+
+        /* --- Product Grid --- */
+        .products-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            padding: 20px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        /* --- Product Card --- */
+        .product-card {
+            background: white;
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Image Area */
+        .image-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 75%;
+            /* 4:3 Aspect Ratio */
+            background: #f8f9fa;
+            overflow: hidden;
+        }
+
+        .product-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 20px;
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover .product-img {
+            transform: scale(1.1);
+        }
+
+        /* Badges (UI Only) */
+        .badge-new {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #27ae60;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            z-index: 2;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .wishlist-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 35px;
+            height: 35px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ccc;
+            cursor: pointer;
+            z-index: 2;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .wishlist-btn:hover {
+            color: #e74c3c;
+            transform: scale(1.1);
+        }
+
+        /* Info Area */
+        .product-info {
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 0 0 5px 0;
+        }
+
+        .rating-stars {
+            color: #f1c40f;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+        }
+
+        .product-price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #27ae60;
+            margin-bottom: 20px;
+        }
+
+        /* Weight Options */
+        .weight-options {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .weight-btn {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            background: white;
+            color: #777;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .weight-btn:hover {
+            border-color: #27ae60;
+            color: #27ae60;
+        }
+
+        .weight-btn.active {
+            background: #27ae60;
+            color: white;
+            border-color: #27ae60;
+            box-shadow: 0 4px 10px rgba(39, 174, 96, 0.2);
+        }
+
+        /* Actions */
+        .action-area {
+            margin-top: auto;
+        }
+
+        .initial-add-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        .initial-add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+        }
+
+        .quantity-controls {
+            display: none;
+            /* Toggled by JS */
+            background: #f0fdf4;
+            border: 1px solid #27ae60;
+            border-radius: 12px;
+            padding: 5px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .quantity-controls.active {
+            display: flex;
+        }
+
+        .qty-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            background: white;
+            color: #27ae60;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s;
+        }
+
+        .qty-btn:hover {
+            background: #27ae60;
+            color: white;
+        }
+
+        .qty-val {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1.1rem;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- Navigation (Preserved) --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1000;
+        }
+
+        .logo-text {
+            text-decoration: none;
+            color: #FFD700;
+            font-weight: 600;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-links li a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links li a:hover,
+        .nav-links li a.active {
+            color: #27ae60;
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .cart-icon {
+            cursor: pointer;
+            position: relative;
+            color: #333;
+            font-size: 1.2rem;
+        }
+
+        .owner-icon {
+            cursor: pointer;
+            color: #333;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+                order: 3;
+            }
+
+            .cart-icon {
+                order: 2;
+                margin-right: 20px;
+            }
+
+            .owner-icon {
+                order: 2;
+                margin-right: 15px;
+            }
+
+            .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                background: white;
+                padding: 20px;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+                text-align: center;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .products-container {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                padding: 20px;
+                gap: 20px;
+            }
+            .search-section {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .products-container {
+                grid-template-columns: 1fr;
+            }
+
+            .search-box input {
+                font-size: 0.9rem;
+                padding: 12px 15px 12px 40px;
+            }
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background-color: white;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            margin: 20px 5% 0;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .back-btn:hover {
+            background-color: #f8f9fa;
+            transform: translateX(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html" class="logo-text">
+                    <img src="images/Final%20_logo2.png" alt="VSR Logo"
+                        style="width: 40px; height: 40px; vertical-align: middle; margin-right: 10px;"> VSR Farm's
+                </a>
+            </div>
+            <div class="menu-toggle" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="products.html" class="active"><i class="fas fa-store"></i> Products</a></li>
+                <li><a href="payment.html"><i class="fas fa-credit-card"></i> Payment</a></li>
+                <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+            </ul>
+            <div class="cart-icon" onclick="window.location.href='payment.html'">
+                <i class="fas fa-shopping-cart"></i>
+                <span id="cart-count" class="cart-count">0</span>
+            </div>
+            <div class="owner-icon" onclick="window.location.href='owner_login.html'" title="Owner Login"
+                style="margin-left: 20px;">
+                <i class="fas fa-user-circle"></i>
+            </div>
+        </nav>
+    </header>
+
+    <button onclick="window.history.back()" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Go Back
+    </button>
+
+    <!-- Search Bar Section -->
+    <div class="search-section">
+        <div class="search-box">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchInput" placeholder="Search for fresh milk, ghee, curd..."
+                onkeyup="filterProducts()">
+        </div>
+    </div>
+
+    <div class="products-container">
+        <!-- Product 1 -->
+        <div class="product-card" id="card-milk" data-name="Buffalo Milk" data-img="images/milk_product.png">
+            <div class="badge-new">Fresh</div>
+            <div class="wishlist-btn"><i class="far fa-heart"></i></div>
+            <div class="image-wrapper">
+                <img src="images/milk_product.png" alt="Buffalo Milk" class="product-img">
+            </div>
+            <div class="product-info">
+                <h3 class="product-title">Buffalo Milk</h3>
+                <div class="rating-stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                        class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> (4.8)
+                </div>
+                <p class="product-price">₹37</p>
+                <div class="weight-options">
+                    <button class="weight-btn active" onclick="selectWeight(this, 37, '0.5 Lit')">0.5 Lit</button>
+                    <button class="weight-btn" onclick="selectWeight(this, 75, '1 Lit')">1 Lit</button>
+                </div>
+
+                <div class="action-area">
+                    <button class="initial-add-btn" onclick="startAdding(this)">
+                        <i class="fas fa-cart-plus"></i> Add to Cart
+                    </button>
+                    <div class="quantity-controls">
+                        <button class="qty-btn" onclick="updateQty(this, -1)">-</button>
+                        <span class="qty-val">0</span>
+                        <button class="qty-btn" onclick="updateQty(this, 1)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product 2 -->
+        <div class="product-card" id="card-ghee" data-name="Pure Ghee" data-img="images/ghee_product.png">
+            <div class="badge-new">Pure</div>
+            <div class="wishlist-btn"><i class="far fa-heart"></i></div>
+            <div class="image-wrapper">
+                <img src="images/ghee_product.png" alt="Pure Ghee" class="product-img">
+            </div>
+            <div class="product-info">
+                <h3 class="product-title">Pure Ghee</h3>
+                <div class="rating-stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                        class="fas fa-star"></i><i class="fas fa-star"></i> (5.0)
+                </div>
+                <p class="product-price">₹425</p>
+                <div class="weight-options">
+                    <button class="weight-btn active" onclick="selectWeight(this, 425, '0.5 Kg')">0.5 Kg</button>
+                    <button class="weight-btn" onclick="selectWeight(this, 850, '1 Kg')">1 Kg</button>
+                </div>
+
+                <div class="action-area">
+                    <button class="initial-add-btn" onclick="startAdding(this)">
+                        <i class="fas fa-cart-plus"></i> Add to Cart
+                    </button>
+                    <div class="quantity-controls">
+                        <button class="qty-btn" onclick="updateQty(this, -1)">-</button>
+                        <span class="qty-val">0</span>
+                        <button class="qty-btn" onclick="updateQty(this, 1)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product 3 -->
+        <div class="product-card" id="card-curd" data-name="Fresh Curd" data-img="images/curd_image.png">
+            <div class="badge-new">Creamy</div>
+            <div class="wishlist-btn"><i class="far fa-heart"></i></div>
+            <div class="image-wrapper">
+                <img src="images/curd_image.png" alt="Fresh Curd" class="product-img">
+            </div>
+            <div class="product-info">
+                <h3 class="product-title">Fresh Curd</h3>
+                <div class="rating-stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                        class="fas fa-star"></i><i class="far fa-star"></i> (4.5)
+                </div>
+                <p class="product-price">₹40</p>
+                <div class="weight-options">
+                    <button class="weight-btn active" onclick="selectWeight(this, 40, '0.5 Lit')">0.5 Lit</button>
+                    <button class="weight-btn" onclick="selectWeight(this, 80, '1 Lit')">1 Lit</button>
+                </div>
+
+                <div class="action-area">
+                    <button class="initial-add-btn" onclick="startAdding(this)">
+                        <i class="fas fa-cart-plus"></i> Add to Cart
+                    </button>
+                    <div class="quantity-controls">
+                        <button class="qty-btn" onclick="updateQty(this, -1)">-</button>
+                        <span class="qty-val">0</span>
+                        <button class="qty-btn" onclick="updateQty(this, 1)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product 4 -->
+        <div class="product-card" id="card-paneer" data-name="Fresh Paneer" data-img="images/paneer_product.png">
+            <div class="badge-new">Soft</div>
+            <div class="wishlist-btn"><i class="far fa-heart"></i></div>
+            <div class="image-wrapper">
+                <img src="images/paneer_product.png" alt="Paneer" class="product-img">
+            </div>
+            <div class="product-info">
+                <h3 class="product-title">Fresh Paneer</h3>
+                <div class="rating-stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                        class="fas fa-star"></i><i class="fas fa-star"></i> (4.9)
+                </div>
+                <p class="product-price">₹225</p>
+                <div class="weight-options">
+                    <button class="weight-btn active" onclick="selectWeight(this, 225, '0.5 Kg')">0.5 Kg</button>
+                    <button class="weight-btn" onclick="selectWeight(this, 450, '1 Kg')">1 Kg</button>
+                </div>
+
+                <div class="action-area">
+                    <button class="initial-add-btn" onclick="startAdding(this)">
+                        <i class="fas fa-cart-plus"></i> Add to Cart
+                    </button>
+                    <div class="quantity-controls">
+                        <button class="qty-btn" onclick="updateQty(this, -1)">-</button>
+                        <span class="qty-val">0</span>
+                        <button class="qty-btn" onclick="updateQty(this, 1)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2024 VSR Farm's. All Rights Reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script>
+        // Initialize cards on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.product-card');
+            cards.forEach(card => {
+                // Trigger click on the active weight button to set initial state
+                const activeBtn = card.querySelector('.weight-btn.active');
+                if (activeBtn) activeBtn.click();
+            });
+        });
+
+        function selectWeight(btn, price, weight) {
+            const card = btn.closest('.product-card');
+
+            // Update UI buttons
+            card.querySelectorAll('.weight-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Update Price Display
+            card.querySelector('.product-price').innerText = `₹${price}`;
+
+            // Store current selection on the card
+            card.dataset.currentPrice = price;
+            card.dataset.currentWeight = weight;
+
+            // Check if this specific variant is in cart
+            checkCartState(card);
+        }
+
+        function getProductDetails(card) {
+            const baseName = card.dataset.name;
+            const weight = card.dataset.currentWeight;
+            const price = parseInt(card.dataset.currentPrice);
+            const image = card.dataset.img;
+            const fullName = `${baseName} (${weight})`;
+            return { name: fullName, price, image };
+        }
+
+        function checkCartState(card) {
+            const { name } = getProductDetails(card);
+            const cartItem = cart.find(item => item.name === name);
+
+            const addBtn = card.querySelector('.initial-add-btn');
+            const controls = card.querySelector('.quantity-controls');
+            const qtyVal = card.querySelector('.qty-val');
+
+            if (cartItem) {
+                addBtn.style.display = 'none';
+                controls.classList.add('active');
+                qtyVal.innerText = cartItem.quantity;
+            } else {
+                addBtn.style.display = 'block';
+                controls.classList.remove('active');
+                qtyVal.innerText = '0';
+            }
+        }
+
+        function startAdding(btn) {
+            const card = btn.closest('.product-card');
+            const { name, price, image } = getProductDetails(card);
+
+            // Hide Add button
+            btn.style.display = 'none';
+
+            // Show quantity controls
+            const controls = btn.nextElementSibling;
+            controls.classList.add('active');
+
+            // Set initial value to 1 and add to cart
+            const qtySpan = controls.querySelector('.qty-val');
+            qtySpan.innerText = '1';
+            addToCart(name, price, image, 1);
+        }
+
+        function updateQty(btn, change) {
+            const card = btn.closest('.product-card');
+            const { name, price, image } = getProductDetails(card);
+
+            // Add animation class
+            btn.classList.add('pop-anim');
+            setTimeout(() => btn.classList.remove('pop-anim'), 300);
+
+            // Update local quantity
+            const qtySpan = btn.parentElement.querySelector('.qty-val');
+            let currentQty = parseInt(qtySpan.innerText);
+            let newQty = currentQty + change;
+
+            if (newQty <= 0) {
+                // Revert to Add button
+                const controls = btn.parentElement;
+                controls.classList.remove('active');
+                const addBtn = controls.previousElementSibling;
+                addBtn.style.display = 'block';
+
+                // Remove from cart logic (using the global changeCartQty which handles removal)
+                // Since changeCartQty adds/subtracts, we need to subtract 1 to reach 0
+                changeCartQty(name, -1);
+            } else {
+                qtySpan.innerText = newQty;
+                // Update global cart
+                if (change > 0) {
+                    addToCart(name, price, image, 1);
+                } else {
+                    changeCartQty(name, -1);
+                }
+            }
+        }
+
+        function filterProducts() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const cards = document.querySelectorAll('.product-card');
+
+            cards.forEach(card => {
+                const title = card.querySelector('.product-title').innerText.toLowerCase();
+                if (title.includes(filter)) {
+                    card.style.display = "flex";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

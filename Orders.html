@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        /* Navbar Styles */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1000;
+        }
+
+        .logo-text {
+            text-decoration: none;
+            color: #FFD700;
+            font-weight: 600;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-links li a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links li a:hover,
+        .nav-links li a.active {
+            color: #27ae60;
+        }
+
+        .cart-icon {
+            cursor: pointer;
+            position: relative;
+            color: #333;
+            font-size: 1.2rem;
+        }
+
+        .owner-icon {
+            cursor: pointer;
+            color: #333;
+            font-size: 1.2rem;
+        }
+        
+        /* Page Content Padding */
+        h1 {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+
+        img {
+            max-width: 100px;
+            height: auto;
+            display: block;
+        }
+        .action-container {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            width: fit-content;
+        }
+        .btn-cart { background-color: #333; color: white; }
+        .btn-whatsapp { background-color: #25D366; color: white; font-weight: 600; }
+        select { padding: 8px; border-radius: 5px; border: 1px solid #ddd; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html" class="logo-text">
+                    <img src="images/Final%20_logo2.png" alt="VSR Logo"
+                        style="width: 40px; height: 40px; vertical-align: middle; margin-right: 10px;"> VSR Farm's
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="products.html"><i class="fas fa-store"></i> Products</a></li>
+                <li><a href="payment.html"><i class="fas fa-credit-card"></i> Payment</a></li>
+                <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+            </ul>
+            <div class="owner-icon" onclick="window.location.href='owner_login.html'" title="Owner Login">
+                <i class="fas fa-user-circle"></i>
+            </div>
+        </nav>
+    </header>
+
+    <h1>Order List</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Product Image</th>
+                <th>Product Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Buffalo Milk</td>
+                <td><img src="images/milk_product.png" alt="Buffalo Milk"></td>
+                <td>
+                    <strong>Price:</strong> ₹37 (0.5 Lit) / ₹75 (1 Lit)<br>
+                    Fresh and pure buffalo milk.
+                </td>
+            </tr>
+            <tr>
+                <td>Pure Ghee</td>
+                <td><img src="images/ghee_product.png" alt="Pure Ghee"></td>
+                <td>
+                    <strong>Price:</strong> ₹425 (0.5 Kg) / ₹850 (1 Kg)<br>
+                    Homemade style pure ghee.
+                </td>
+            </tr>
+            <tr>
+                <td>Fresh Curd</td>
+                <td><img src="images/curd_image.png" alt="Fresh Curd"></td>
+                <td>
+                    <strong>Price:</strong> ₹40 (0.5 Lit) / ₹80 (1 Lit)<br>
+                    Thick and creamy fresh curd.
+                </td>
+            </tr>
+            <tr>
+                <td>Fresh Paneer</td>
+                <td><img src="images/paneer_product.png" alt="Fresh Paneer"></td>
+                <td>
+                    <strong>Price:</strong> ₹225 (0.5 Kg) / ₹450 (1 Kg)<br>
+                    Soft and fresh paneer.
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>

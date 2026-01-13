@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VSR Farm's - From our farm to your home</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* --- Global Fixes --- */
+        * {
+            box-sizing: border-box;
+        }
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+        }
+        /* Responsive Navigation Styles */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1000;
+        }
+
+        .logo-text {
+            text-decoration: none;
+            color: #FFD700;
+            font-weight: 600;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-links li a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links li a:hover,
+        .nav-links li a.active {
+            color: #27ae60;
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .cart-icon {
+            cursor: pointer;
+            position: relative;
+            color: #333;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+                order: 3;
+            }
+
+            .cart-icon {
+                order: 2;
+                margin-right: 20px;
+            }
+
+            .owner-icon {
+                order: 2;
+                margin-right: 15px;
+            }
+
+            .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                background: white;
+                padding: 20px;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+                text-align: center;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .profile-flip-container {
+                order: 2;
+                margin-right: 15px;
+                margin-left: 0 !important;
+            }
+        }
+
+        /* --- Profile Flip Animation Styles --- */
+        .profile-flip-container {
+            width: 40px;
+            height: 40px;
+            perspective: 1000px;
+            margin-left: 20px;
+            position: relative;
+            z-index: 2000;
+        }
+
+        .profile-flipper {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transform-style: preserve-3d;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .profile-flip-container.flipped .profile-flipper {
+            transform: rotateY(180deg);
+        }
+
+        .profile-front,
+        .profile-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .profile-front {
+            background-color: transparent;
+            color: #333;
+            font-size: 1.4rem;
+        }
+
+        .profile-front:hover {
+            color: #27ae60;
+        }
+
+        .profile-back {
+            background-color: white;
+            transform: rotateY(180deg);
+            width: 90px;
+            /* Wider to fit 2 icons */
+            height: 44px;
+            left: 50%;
+            top: 50%;
+            margin-left: -45px;
+            /* Center horizontally */
+            margin-top: -22px;
+            /* Center vertically */
+            border-radius: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            display: flex;
+            justify-content: space-evenly;
+            border: 1px solid #f0f0f0;
+        }
+
+        .sub-icon {
+            font-size: 1.1rem;
+            color: #555;
+            padding: 8px;
+            transition: all 0.2s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sub-icon:hover {
+            color: #27ae60;
+            transform: scale(1.1);
+        }
+
+        .vertical-separator {
+            width: 1px;
+            height: 20px;
+            background-color: #eee;
+        }
+
+        /* --- Reviews Slider Animation --- */
+        .reviews-section {
+            overflow: hidden;
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .reviews-grid {
+            display: flex;
+            gap: 30px;
+            width: max-content;
+            animation: slideLeft 40s linear infinite;
+            padding: 20px 5px;
+        }
+
+        .reviews-grid:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes slideLeft {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .review-card {
+            flex: 0 0 auto;
+            width: 300px;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            box-sizing: border-box;
+        }
+
+        /* --- Responsive Layout Adjustments --- */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem !important;
+                padding: 0 15px;
+            }
+            .features {
+                padding: 40px 5% !important;
+                margin-top: -40px !important;
+            }
+        }
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem !important;
+            }
+            .review-card {
+                width: 280px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html" class="logo-text">
+                    <img src="images/Final%20_logo2.png" alt="VSR Logo"
+                        style="width: 40px; height: 40px; vertical-align: middle; margin-right: 10px;"> VSR Farm's
+                </a>
+            </div>
+            <div class="menu-toggle" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="products.html"><i class="fas fa-store"></i> Products</a></li>
+                <li><a href="payment.html"><i class="fas fa-credit-card"></i> Payment</a></li>
+                <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+            </ul>
+            <div class="cart-icon" onclick="window.location.href='payment.html'">
+                <i class="fas fa-shopping-cart"></i>
+                <span id="cart-count" class="cart-count">0</span>
+            </div>
+
+            <!-- Profile Flip Icon -->
+            <div class="profile-flip-container" id="profileFlip">
+                <div class="profile-flipper">
+                    <div class="profile-front" title="Login Options">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="profile-back">
+                        <div class="sub-icon" title="Owner Login"
+                            onclick="event.stopPropagation(); window.location.href='owner_login.html'"><i
+                                class="fas fa-user-tie"></i></div>
+                        <div class="vertical-separator"></div>
+                        <div class="sub-icon" title="Customer Login"
+                            onclick="event.stopPropagation(); window.location.href='customer.html'"><i
+                                class="fas fa-user"></i></div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero"
+        style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('images/banner_image.jpg') no-repeat center center/cover; color: white;">
+        <h1>FROM OUR FARM TO YOUR HOME</h1>
+        <p>Pure, Fresh, and Wholesome Dairy Products</p>
+        <a href="products.html" class="btn-primary">Order Now</a>
+    </section>
+
+    <section class="features">
+        <div class="feature-card">
+            <i class="fas fa-check-circle"></i>
+            <h3>100% Pure</h3>
+            <p>Guaranteed purity in every drop.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-ban"></i>
+            <h3>No Preservatives</h3>
+            <p>Fresh from the farm, zero chemicals.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-shipping-fast"></i>
+            <h3>Home Delivery</h3>
+            <p>Right to your doorstep.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-calendar-alt"></i>
+            <h3>Since 1980</h3>
+            <p>Decades of trust and quality.</p>
+        </div>
+    </section>
+
+    <section style="text-align: center; padding: 40px 20px;">
+        <h2>Welcome to VSR Farm's</h2>
+        <p style="max-width: 800px; margin: 20px auto; font-size: 1.1rem;">
+            We supply all types of Milk and Milk products required for weddings and other auspicious household events.
+            Experience the taste of tradition and purity with VSR.
+        </p>
+    </section>
+
+    <!-- New Customer Reviews Section -->
+    <section class="reviews-section">
+        <h2>What Our Customers Say</h2>
+        <div class="reviews-grid">
+            <!-- Review 1 -->
+            <div class="review-card">
+                <div class="quote-icon">❝</div>
+                <div class="reviewer-header">
+                    <div class="reviewer-avatar"><i class="fas fa-user"></i></div>
+                    <div class="reviewer-info">
+                        <h4>Lakshmi Narayana</h4>
+                        <div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    </div>
+                </div>
+                <p class="review-text">"The buffalo milk is incredibly thick and fresh. It reminds me of the milk we
+                    used to get in our village. Highly recommended!"</p>
+            </div>
+
+            <!-- Review 2 -->
+            <div class="review-card">
+                <div class="quote-icon">❝</div>
+                <div class="reviewer-header">
+                    <div class="reviewer-avatar"><i class="fas fa-user-tie"></i></div>
+                    <div class="reviewer-info">
+                        <h4>Suresh Reddy</h4>
+                        <div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="review-text">"I have been ordering pure ghee from VSR Farm's for 6 months now. The aroma is
+                    authentic and the taste is unbeatable."</p>
+            </div>
+
+            <!-- Review 3 -->
+            <div class="review-card">
+                <div class="quote-icon">❝</div>
+                <div class="reviewer-header">
+                    <div class="reviewer-avatar"><i class="fas fa-user-circle"></i></div>
+                    <div class="reviewer-info">
+                        <h4>Anitha K.</h4>
+                        <div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    </div>
+                </div>
+                <p class="review-text">"Excellent service and timely delivery. The paneer is so soft and fresh, perfect
+                    for my home cooking."</p>
+            </div>
+            <!---Review 4-->
+            <div class="review-card">
+                <div class="quote-icon">❝</div>
+                <div class="reviewer-header">
+                    <div class="reviewer-avatar"><i class="fas fa-user"></i></div>
+                    <div class="reviewer-info">
+                        <h4>Srinivas Rao</h4>
+                        <div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    </div>
+                </div>
+                <p class="review-text">"The buffalo milk is incredibly thick and fresh. It reminds me of the milk we
+                    used to get in our village. Highly recommended!"</p>
+            </div>
+            <!---Review 5-->
+            <div class="review-card">
+                <div class="quote-icon">❝</div>
+                <div class="reviewer-header">
+                    <div class="reviewer-avatar"><i class="fas fa-user"></i></div>
+                    <div class="reviewer-info">
+                        <h4>Vijaya Lakshmi</h4>
+                        <div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    </div>
+                </div>
+                <p class="review-text">"Paneer Product is Very Soft and rich in taste it was so delicious."</p>
+            </div>
+        </div>
+    </section>
+
+    <footer id="footer">
+        <p>&copy; 2024 VSR Farm's. All Rights Reserved.</p>
+        <p>Kavali, Andhra Pradesh - 524201</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script>
+        // Profile Flip Logic
+        const profileFlip = document.getElementById('profileFlip');
+
+        profileFlip.addEventListener('click', function () {
+            this.classList.toggle('flipped');
+        });
+
+        // Close flip when clicking outside
+        document.addEventListener('click', function (e) {
+            if (!profileFlip.contains(e.target)) {
+                profileFlip.classList.remove('flipped');
+            }
+        });
+
+        // Auto-scroll animation to Ratings & Reviews
+        window.addEventListener('load', function () {
+            setTimeout(function () {
+                const reviewsSection = document.querySelector('.reviews-section');
+                if (reviewsSection) {
+                    reviewsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 3500); // 3.5 seconds delay
+        });
+
+        // Initialize Reviews Slider
+        document.addEventListener('DOMContentLoaded', function () {
+            const grid = document.querySelector('.reviews-grid');
+
+            if (grid) {
+                // Clone items for seamless looping
+                const items = Array.from(grid.children);
+                items.forEach(item => grid.appendChild(item.cloneNode(true)));
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - VSR Farm's</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* --- Global & Reset --- */
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+
+        /* --- Navigation (Preserved) --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1000;
+        }
+
+        .logo-text {
+            text-decoration: none;
+            color: #FFD700;
+            font-weight: 600;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-links li a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links li a:hover,
+        .nav-links li a.active {
+            color: #27ae60;
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .cart-icon {
+            cursor: pointer;
+            position: relative;
+            color: #333;
+            font-size: 1.2rem;
+        }
+
+        .owner-icon {
+            cursor: pointer;
+            color: #333;
+            font-size: 1.2rem;
+        }
+
+        /* --- Contact Page Layout --- */
+        .main-wrapper {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .contact-card {
+            display: flex;
+            flex-wrap: wrap;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        /* Left Column: Info */
+        .contact-info {
+            flex: 1;
+            min-width: 280px;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 50px 40px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+
+        .contact-info::before {
+            content: '';
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            top: -30px;
+            right: -30px;
+        }
+
+        .contact-info h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .contact-info p {
+            opacity: 0.9;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            gap: 15px;
+        }
+
+        .info-icon {
+            font-size: 1.2rem;
+            background: rgba(255, 255, 255, 0.2);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .social-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .social-btn:hover {
+            background: white;
+            color: #27ae60;
+            transform: translateY(-3px);
+        }
+
+        /* Right Column: Form */
+        .contact-form-wrapper {
+            flex: 1.5;
+            min-width: 280px;
+            padding: 50px 40px;
+            background: white;
+        }
+
+        .form-title {
+            color: #27ae60;
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .input-group input,
+        .input-group textarea {
+            width: 100%;
+            padding: 10px 0;
+            font-size: 1rem;
+            color: #333;
+            border: none;
+            border-bottom: 2px solid #ddd;
+            outline: none;
+            background: transparent;
+            transition: border-color 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .input-group label {
+            position: absolute;
+            top: 10px;
+            left: 0;
+            font-size: 1rem;
+            color: #999;
+            pointer-events: none;
+            transition: 0.3s ease all;
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus,
+        .input-group input:valid,
+        .input-group textarea:valid {
+            border-bottom-color: #27ae60;
+        }
+
+        .input-group input:focus~label,
+        .input-group textarea:focus~label,
+        .input-group input:valid~label,
+        .input-group textarea:valid~label {
+            top: -20px;
+            font-size: 0.85rem;
+            color: #27ae60;
+        }
+
+        .submit-btn {
+            background: linear-gradient(to right, #27ae60, #2ecc71);
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(39, 174, 96, 0.4);
+        }
+
+        /* Map Section */
+        .map-container {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin-top: 30px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+                order: 3;
+            }
+
+            .cart-icon {
+                order: 2;
+                margin-right: 20px;
+            }
+
+            .owner-icon {
+                order: 2;
+                margin-right: 15px;
+            }
+
+            .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                background: white;
+                padding: 20px;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+                text-align: center;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .contact-card {
+                flex-direction: column;
+            }
+            
+            .contact-info, .contact-form-wrapper {
+                min-width: 100%;
+                padding: 30px 20px;
+            }
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background-color: white;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            margin: 20px 5% 0;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .back-btn:hover {
+            background-color: #f8f9fa;
+            transform: translateX(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .qr-box {
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html" class="logo-text">
+                    <img src="images/Final%20_logo2.png" alt="VSR Logo"
+                        style="width: 40px; height: 40px; vertical-align: middle; margin-right: 10px;"> VSR Farm's
+                </a>
+            </div>
+            <div class="menu-toggle" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="products.html"><i class="fas fa-store"></i> Products</a></li>
+                <li><a href="payment.html"><i class="fas fa-credit-card"></i> Payment</a></li>
+                <li><a href="contact.html" class="active"><i class="fas fa-envelope"></i> Contact</a></li>
+            </ul>
+            <div class="cart-icon" onclick="window.location.href='payment.html'">
+                <i class="fas fa-shopping-cart"></i>
+                <span id="cart-count" class="cart-count">0</span>
+            </div>
+            <div class="owner-icon" onclick="window.location.href='owner_login.html'" title="Owner Login"
+                style="margin-left: 20px;">
+                <i class="fas fa-user-circle"></i>
+            </div>
+        </nav>
+    </header>
+
+    <button onclick="window.history.back()" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Go Back
+    </button>
+
+    <div class="main-wrapper">
+        <div class="contact-card">
+            <!-- Left Side: Contact Info -->
+            <div class="contact-info">
+                <div>
+                    <h2>Contact Us</h2>
+                    <p>We are here to serve you fresh milk products daily. Reach out to us for any queries.</p>
+
+                    <div class="info-item">
+                        <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div>
+                            <strong>VSR Milk Products</strong><br>
+                            Door No: 11-33-938,<br>
+                            VR Nagar, Sai Baba Temple Street,<br>
+                            Kavali – 524201, Andhra Pradesh.
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-icon"><i class="fas fa-phone-alt"></i></div>
+                        <div>
+                            <strong>Phone</strong><br>
+                            <a href="tel:+918143713538" style="color: white; text-decoration: none;">+91 81437 13538</a>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-icon"><i class="fab fa-whatsapp"></i></div>
+                        <div>
+                            <strong>WhatsApp Chat</strong><br>
+                            <div class="qr-box">
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://wa.me/918143713538"
+                                    alt="WhatsApp QR">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="social-links">
+                    <a href="https://www.youtube.com/@VSRMilkProducts" target="_blank" class="social-btn"
+                        title="YouTube"><i class="fab fa-youtube"></i></a>
+                    <a href="https://www.instagram.com/vsrfarm/" target="_blank" class="social-btn" title="Instagram"><i
+                            class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+
+            <!-- Right Side: Contact Form -->
+            <div class="contact-form-wrapper">
+                <h3 class="form-title">Send us a Message</h3>
+                <form action="#" method="POST">
+                    <div class="input-group">
+                        <input type="text" name="name" required>
+                        <label>Your Name</label>
+                    </div>
+                    <div class="input-group">
+                        <input type="email" name="email" required>
+                        <label>Email Address</label>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" name="phone" required>
+                        <label>Phone Number</label>
+                    </div>
+                    <div class="input-group">
+                        <textarea name="message" rows="4" required></textarea>
+                        <label>Message</label>
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        Send Message <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="map-container">
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3862.909999999999!2d79.99!3d14.91!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTTCsDU0JzM2LjAiTiA3OcKwNTknMjQuMCJF!5e0!3m2!1sen!2sin!4v1630000000000!5m2!1sen!2sin"
+                width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy">
+            </iframe>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 1980 VSR Milk Products. All Rights Reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+
+</html>

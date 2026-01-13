@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - VSR Farm's</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* --- Global & Reset --- */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* --- Layout & Container --- */
+        .checkout-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        /* --- Cards --- */
+        .card-box {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* --- Progress Steps --- */
+        .progress-track {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #aaa;
+            font-weight: 500;
+            font-size: 0.9rem;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .step.active {
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        .step-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .step.active .step-icon {
+            background: #27ae60;
+            color: white;
+            box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
+        }
+
+        /* --- Payment Methods (Left Column) --- */
+        .payment-tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .p-tab {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            color: #555;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .p-tab i {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .p-tab.active {
+            border-color: #27ae60;
+            background: #f0fdf4;
+            color: #27ae60;
+        }
+
+        .p-tab:hover:not(.active) {
+            border-color: #ddd;
+            background: #f9f9f9;
+        }
+
+        .upi-container {
+            text-align: center;
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px dashed #ccc;
+        }
+
+        .upi-id-box {
+            background: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: inline-block;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 1.1rem;
+            color: #333;
+            border: 1px solid #eee;
+        }
+
+        /* --- Order Summary (Right Column) --- */
+        #order-summary {
+            margin-bottom: 20px;
+        }
+
+        /* Generic styling for injected cart items */
+        #order-summary>div {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.95rem;
+        }
+
+        #order-summary>div:last-child {
+            border-bottom: none;
+        }
+
+        #order-total {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            border-top: 2px solid #eee;
+            padding-top: 20px;
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .secure-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+            color: #777;
+            font-size: 0.85rem;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        /* --- Buttons --- */
+        .whatsapp-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            text-decoration: none;
+            padding: 16px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-top: 25px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .whatsapp-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background-color: white;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background-color: #f8f9fa;
+            transform: translateX(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- Overlay --- */
+        .success-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .success-overlay h2 {
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+
+        .success-overlay p {
+            font-size: 1.2rem;
+            margin: 10px 0;
+            color: #333;
+        }
+
+        .logo-text {
+            color: #FFD700 !important;
+        }
+
+        .owner-icon {
+            cursor: pointer;
+            color: #333;
+            font-size: 1.2rem;
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .checkout-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .checkout-container {
+                margin-top: 10px;
+            }
+
+            .card-box {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html" class="logo-text">
+                    <img src="images/Final%20_logo2.png" alt="VSR Logo"
+                        style="width: 40px; height: 40px; vertical-align: middle; margin-right: 10px;"> VSR Farm's
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html" id="products-tab">Products</a></li>
+                <li><a href="payment.html" class="active">Payment</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="cart-icon" onclick="window.location.href='payment.html'">
+                <i class="fas fa-shopping-cart"></i>
+                <span id="cart-count" class="cart-count">0</span>
+            </div>
+            <div class="owner-icon" onclick="window.location.href='owner_login.html'" title="Owner Login"
+                style="margin-left: 20px;">
+                <i class="fas fa-user-circle"></i>
+            </div>
+        </nav>
+    </header>
+
+    <div class="checkout-container">
+        <button onclick="window.history.back()" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Go Back
+        </button>
+
+        <!-- Progress Indicator -->
+        <div class="progress-track">
+            <div class="step">
+                <div class="step-icon"><i class="fas fa-check"></i></div> Cart
+            </div>
+            <div class="step active">
+                <div class="step-icon">2</div> Payment
+            </div>
+            <div class="step">
+                <div class="step-icon">3</div> Done
+            </div>
+        </div>
+
+        <div class="checkout-grid">
+            <!-- Left Column: Payment Methods -->
+            <div class="card-box">
+                <h2><i class="fas fa-wallet" style="color: #27ae60;"></i> Payment Options</h2>
+
+                <div class="payment-tabs">
+                    <div class="p-tab active">
+                        <i class="fas fa-qrcode"></i>
+                        <span>UPI / QR</span>
+                    </div>
+                    <div class="p-tab">
+                        <i class="fas fa-credit-card"></i>
+                        <span>Card</span>
+                    </div>
+                    <div class="p-tab">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>Cash</span>
+                    </div>
+                </div>
+
+                <div class="upi-container">
+                    <p style="margin-top: 0; color: #666;">Scan the QR code to pay securely</p>
+
+                    <!-- Existing UPI Logos Container -->
+                    <div class="upi-logos"
+                        style="display:flex; justify-content:center; gap:40px; flex-wrap:wrap; margin: 20px 0;">
+                        <div style="text-align:center;">
+                            <div style="margin-bottom: 5px;"><img
+                                    src="https://upload.wikimedia.org/wikipedia/commons/2/24/Paytm_Logo_%28standalone%29.svg"
+                                    alt="Paytm UPI" style="height: 25px; vertical-align: middle;"></div>
+                            <div class="upi-id-box">8143713538@ptsbi</div>
+                            <br>
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=8143713538@ptsbi&pn=CHEVURI%20SANTHI"
+                                alt="Paytm QR Code"
+                                style="border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                        </div>
+                    </div>
+
+                    <p style="font-size: 0.9rem; color: #6f6f6a;"><i class="fas fa-info-circle"></i> Scan & Pay on
+                        delivery
+                        available.</p>
+                </div>
+
+                <!-- Card Payment Section -->
+                <div id="card-payment-container" style="display: none; margin-top: 20px; animation: fadeIn 0.4s;">
+                    <!-- Card Preview -->
+                    <div class="credit-card-preview"
+                        style="background: linear-gradient(135deg, #2c3e50, #4ca1af); color: white; padding: 25px; border-radius: 16px; margin-bottom: 25px; position: relative; min-height: 160px; box-shadow: 0 15px 35px rgba(0,0,0,0.2);">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px;">
+                            <div id="card-chip"
+                                style="width: 50px; height: 35px; background: linear-gradient(135deg, #e0e0e0, #bdbdbd); border-radius: 6px; position: relative; overflow: hidden; border: 1px solid #999;">
+                                <div
+                                    style="position: absolute; top: 10px; left: 0; width: 100%; height: 1px; background: #888;">
+                                </div>
+                                <div
+                                    style="position: absolute; top: 24px; left: 0; width: 100%; height: 1px; background: #888;">
+                                </div>
+                                <div
+                                    style="position: absolute; top: 0; left: 16px; width: 1px; height: 100%; background: #888;">
+                                </div>
+                                <div
+                                    style="position: absolute; top: 0; left: 33px; width: 1px; height: 100%; background: #888;">
+                                </div>
+                            </div>
+                            <div id="card-type-display"
+                                style="font-size: 1.2rem; font-weight: bold; font-style: italic; text-transform: uppercase; opacity: 0.9;">
+                                CARD</div>
+                        </div>
+                        <div id="preview-number"
+                            style="font-size: 1.5rem; letter-spacing: 3px; margin-bottom: 25px; font-family: 'Courier New', monospace; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+                            #### #### #### ####</div>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                            <div>
+                                <div
+                                    style="font-size: 0.7rem; opacity: 0.8; text-transform: uppercase; margin-bottom: 4px;">
+                                    Card Holder</div>
+                                <div id="preview-name"
+                                    style="font-size: 1rem; text-transform: uppercase; font-weight: 500; letter-spacing: 1px;">
+                                    FULL NAME</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div
+                                    style="font-size: 0.7rem; opacity: 0.8; text-transform: uppercase; margin-bottom: 4px;">
+                                    Expires</div>
+                                <div id="preview-expiry" style="font-size: 1rem; font-weight: 500;">MM/YY</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Form -->
+                    <div class="card-form" style="display: grid; gap: 20px;">
+                        <div class="form-group">
+                            <label
+                                style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: #555; font-weight: 500;">Card
+                                Number</label>
+                            <input type="text" id="card-number" placeholder="0000 0000 0000 0000" maxlength="19"
+                                style="width: 100%; padding: 14px; border: 1px solid #e0e0e0; border-radius: 10px; font-family: 'Poppins', sans-serif; box-sizing: border-box; font-size: 1rem; transition: border 0.3s;">
+                        </div>
+                        <div class="form-group">
+                            <label
+                                style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: #555; font-weight: 500;">Card
+                                Holder Name</label>
+                            <input type="text" id="card-name" placeholder="Name on Card"
+                                style="width: 100%; padding: 14px; border: 1px solid #e0e0e0; border-radius: 10px; font-family: 'Poppins', sans-serif; box-sizing: border-box; font-size: 1rem; transition: border 0.3s;">
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div class="form-group">
+                                <label
+                                    style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: #555; font-weight: 500;">Expiry
+                                    Date</label>
+                                <input type="text" id="card-expiry" placeholder="MM/YY" maxlength="5"
+                                    style="width: 100%; padding: 14px; border: 1px solid #e0e0e0; border-radius: 10px; font-family: 'Poppins', sans-serif; box-sizing: border-box; font-size: 1rem; transition: border 0.3s;">
+                            </div>
+                            <div class="form-group">
+                                <label
+                                    style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: #555; font-weight: 500;">CVV</label>
+                                <input type="password" id="card-cvv" placeholder="123" maxlength="3"
+                                    style="width: 100%; padding: 14px; border: 1px solid #e0e0e0; border-radius: 10px; font-family: 'Poppins', sans-serif; box-sizing: border-box; font-size: 1rem; transition: border 0.3s;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="pay-now-btn" disabled
+                        style="width: 100%; padding: 16px; background: #bdc3c7; color: white; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: 600; margin-top: 30px; cursor: not-allowed; transition: all 0.3s; box-shadow: none;">
+                        Pay Now
+                    </button>
+                    <div id="payment-status-msg"
+                        style="margin-top: 15px; text-align: center; font-size: 0.95rem; min-height: 20px;"></div>
+                </div>
+
+                <a href="images/what'sapp_qr_code.jpeg" id="whatsapp-order-btn" class="whatsapp-btn" target="_blank">
+                    <i class="fab fa-whatsapp" style="font-size: 1.4rem;"></i> Place Order on WhatsApp
+                </a>
+            </div>
+
+            <!-- Right Column: Order Summary -->
+            <div class="card-box" style="height: fit-content;">
+                <h2><i class="fas fa-shopping-bag" style="color: #e67e22;"></i> Order Summary</h2>
+                <div id="order-summary">
+                    <!-- Cart items will appear here via JS -->
+                </div>
+                <h3 id="order-total">Total: <span>₹0</span></h3>
+
+                <div class="secure-badge">
+                    <i class="fas fa-lock"></i> 100% Secure & Safe Payment
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="success-overlay" class="success-overlay">
+        <i class="fas fa-check-circle" style="font-size: 5rem; color: #28a745; margin-bottom: 20px;"></i>
+        <h2>Your Transaction is Completed. Thanks for your shopping.</h2>
+        <p>Please follow us on social media platforms:</p>
+        <div style="margin-top: 20px; font-size: 2rem; display: flex; gap: 20px;">
+            <a href="#" style="color: #E1306C;"><i class="fab fa-instagram"></i></a>
+            <a href="#" style="color: #FF0000;"><i class="fab fa-youtube"></i></a>
+            <a href="#" style="color: #1877F2;"><i class="fab fa-facebook"></i></a>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 VSR Farm's. All Rights Reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script>
+        // --- Payment Logic Implementation ---
+        document.addEventListener('DOMContentLoaded', function () {
+            const tabs = document.querySelectorAll('.p-tab');
+            const upiContainer = document.querySelector('.upi-container');
+            const cardContainer = document.getElementById('card-payment-container');
+            const whatsappBtn = document.getElementById('whatsapp-order-btn');
+
+            const cardNum = document.getElementById('card-number');
+            const cardName = document.getElementById('card-name');
+            const cardExp = document.getElementById('card-expiry');
+            const cardCvv = document.getElementById('card-cvv');
+            const payBtn = document.getElementById('pay-now-btn');
+            const statusMsg = document.getElementById('payment-status-msg');
+
+            const prevNum = document.getElementById('preview-number');
+            const prevName = document.getElementById('preview-name');
+            const prevExp = document.getElementById('preview-expiry');
+            const prevType = document.getElementById('card-type-display');
+
+            let isPaymentCompleted = false;
+
+            // Tab Switching
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function () {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    const tabName = this.querySelector('span').innerText;
+
+                    if (tabName.includes('Card')) {
+                        upiContainer.style.display = 'none';
+                        whatsappBtn.style.display = 'none';
+                        cardContainer.style.display = 'block';
+                    } else {
+                        upiContainer.style.display = 'block';
+                        whatsappBtn.style.display = 'flex';
+                        cardContainer.style.display = 'none';
+                    }
+                });
+            });
+
+            // Card Input Logic
+            cardNum.addEventListener('input', function (e) {
+                let value = e.target.value.replace(/\D/g, '');
+                let formatted = '';
+                for (let i = 0; i < value.length; i++) {
+                    if (i > 0 && i % 4 === 0) formatted += ' ';
+                    formatted += value[i];
+                }
+                e.target.value = formatted;
+                prevNum.innerText = formatted || '#### #### #### ####';
+
+                // Detect Type
+                let type = 'CARD';
+                if (/^4/.test(value)) type = 'VISA';
+                else if (/^5[1-5]/.test(value)) type = 'MASTERCARD';
+                else if (/^(60|6521|6522)/.test(value)) type = 'RUPAY';
+                else if (/^3[47]/.test(value)) type = 'AMEX';
+                prevType.innerText = type;
+
+                const previewCard = document.querySelector('.credit-card-preview');
+                if (type === 'VISA') previewCard.style.background = 'linear-gradient(135deg, #1a2980, #26d0ce)';
+                else if (type === 'MASTERCARD') previewCard.style.background = 'linear-gradient(135deg, #c31432, #240b36)';
+                else if (type === 'RUPAY') previewCard.style.background = 'linear-gradient(135deg, #f46b45, #eea849)';
+                else previewCard.style.background = 'linear-gradient(135deg, #2c3e50, #4ca1af)';
+
+                validateForm();
+            });
+
+            cardName.addEventListener('input', function (e) {
+                e.target.value = e.target.value.replace(/[^a-zA-Z\s]/g, '');
+                prevName.innerText = e.target.value.toUpperCase() || 'FULL NAME';
+                validateForm();
+            });
+
+            cardExp.addEventListener('input', function (e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length >= 2) value = value.substring(0, 2) + '/' + value.substring(2, 4);
+                e.target.value = value;
+                prevExp.innerText = value || 'MM/YY';
+                validateForm();
+            });
+
+            cardCvv.addEventListener('input', function (e) {
+                e.target.value = e.target.value.replace(/\D/g, '');
+                validateForm();
+            });
+
+            function validateForm() {
+                const num = cardNum.value.replace(/\s/g, '');
+                if (num.length >= 13 && cardName.value.length > 3 && cardExp.value.length === 5 && cardCvv.value.length === 3 && !isPaymentCompleted) {
+                    payBtn.disabled = false;
+                    payBtn.style.background = '#27ae60';
+                    payBtn.style.cursor = 'pointer';
+                    payBtn.style.boxShadow = '0 5px 15px rgba(39, 174, 96, 0.3)';
+                } else {
+                    payBtn.disabled = true;
+                    payBtn.style.background = '#bdc3c7';
+                    payBtn.style.cursor = 'not-allowed';
+                    payBtn.style.boxShadow = 'none';
+                }
+            }
+
+            payBtn.addEventListener('click', function () {
+                if (isPaymentCompleted) return;
+
+                payBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                payBtn.disabled = true;
+                statusMsg.innerHTML = '<span style="color: #3498db;">Payment In Progress...</span>';
+
+                setTimeout(() => {
+                    const isSuccess = Math.random() > 0.1; // 90% success rate
+                    if (isSuccess) {
+                        isPaymentCompleted = true;
+                        payBtn.innerHTML = '<i class="fas fa-check"></i> Paid';
+                        statusMsg.innerHTML = '<span style="color: #27ae60;">Payment Completed Successfully!</span>';
+
+                        // Generate Receipt
+                        const cart = JSON.parse(localStorage.getItem('vsr_cart')) || [];
+                        let total = 0;
+                        let receiptHtml = '<div style="text-align: left; background: #f9f9f9; padding: 20px; border-radius: 10px; margin: 20px 0; font-size: 0.9rem; color: #333;">';
+                        receiptHtml += `<div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px; font-weight: bold; display: flex; justify-content: space-between;"><span>Item</span><span>Amount</span></div>`;
+
+                        cart.forEach(item => {
+                            const itemTotal = item.price * item.quantity;
+                            total += itemTotal;
+                            receiptHtml += `<div style="display: flex; justify-content: space-between; margin-bottom: 5px;"><span>${item.name} x ${item.quantity}</span><span>₹${itemTotal}</span></div>`;
+                        });
+
+                        receiptHtml += `<div style="border-top: 1px solid #ddd; padding-top: 10px; margin-top: 10px; font-weight: bold; font-size: 1.1rem; display: flex; justify-content: space-between;"><span>Total Paid</span><span>₹${total}</span></div>`;
+                        receiptHtml += `<div style="margin-top: 15px; font-size: 0.85rem; color: #777;">Status: <span style="color: #27ae60; font-weight: bold;">Payment Completed</span></div>`;
+                        receiptHtml += '</div>';
+
+                        // Save Order
+                        const orders = JSON.parse(localStorage.getItem('vsr_orders')) || [];
+                        orders.push({
+                            id: 'ORD' + Math.floor(Math.random() * 100000),
+                            date: new Date().toISOString(),
+                            status: 'Success (Card)',
+                            items: cart,
+                            total: total
+                        });
+                        localStorage.setItem('vsr_orders', JSON.stringify(orders));
+                        localStorage.removeItem('vsr_cart');
+
+                        // Show Overlay
+                        const overlay = document.getElementById('success-overlay');
+                        overlay.querySelector('h2').insertAdjacentHTML('afterend', receiptHtml);
+                        overlay.style.display = 'flex';
+
+                        setTimeout(() => { window.location.href = 'index.html'; }, 5000);
+                    } else {
+                        payBtn.innerHTML = 'Pay Now';
+                        payBtn.disabled = false;
+                        statusMsg.innerHTML = '<span style="color: #e74c3c;">Payment Declined. Please try again.</span>';
+                    }
+                }, 2000);
+            });
+        });
+
+        document.getElementById('whatsapp-order-btn').addEventListener('click', function (e) {
+            e.preventDefault();
+
+            // Retrieve cart details from localStorage
+            const cart = JSON.parse(localStorage.getItem('vsr_cart')) || [];
+            let message = "Hello, I would like to place an order:\n\n";
+            let total = 0;
+
+            if (cart.length > 0) {
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    message += `${item.name} (Qty: ${item.quantity}) - ₹${itemTotal}\n`;
+                    total += itemTotal;
+                });
+                message += `\nTotal Amount: ₹${total}`;
+            } else {
+                message += "I am interested in your products.";
+            }
+
+            // Save to Order History for Orders.html
+            if (cart.length > 0) {
+                const orders = JSON.parse(localStorage.getItem('vsr_orders')) || [];
+                const newOrder = {
+                    id: 'ORD' + Math.floor(Math.random() * 100000),
+                    date: new Date().toISOString(),
+                    status: 'Success',
+                    items: cart,
+                    total: total
+                };
+                orders.push(newOrder);
+                localStorage.setItem('vsr_orders', JSON.stringify(orders));
+
+                // Clear the cart
+                localStorage.removeItem('vsr_cart');
+            }
+
+            // Open WhatsApp
+            const phoneNumber = "918143713538";
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+
+            // Show the success overlay
+            const overlay = document.getElementById('success-overlay');
+            overlay.style.display = 'flex';
+
+            // Redirect to index.html after 4 seconds
+            setTimeout(function () {
+                window.location.href = 'index.html';
+            }, 4000);
+        });
+    </script>
+</body>
+
+</html>
